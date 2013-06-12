@@ -8,7 +8,8 @@ SOURCE         = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX   = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/ar-dm'
 DM_VERSION     = '~> 1.2.0'
-DO_VERSION     = '~> 0.10.6'
+DO_VERSION     = '~> 0.10.12'
+RAILS_VERSION  = '~> 3.0'
 DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 CURRENT_BRANCH = ENV.fetch('GIT_BRANCH', 'master')
 
