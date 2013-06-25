@@ -9,13 +9,17 @@ REPO_POSTFIX   = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/ar-dm'
 DM_VERSION     = '~> 1.2.0'
 DO_VERSION     = '~> 0.10.12'
-RAILS_VERSION  = '~> 3.0'
+RAILS_VERSION  = [ '>= 3.0', '< 5.0' ]
 DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 CURRENT_BRANCH = ENV.fetch('GIT_BRANCH', 'master')
 
 # DataMapper dependencies
-gem 'ardm-core',         DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-core#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+gem 'ardm-core',         DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-core#{REPO_POSTFIX}",         :branch => CURRENT_BRANCH
 gem 'ardm-active_model', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-active_model#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+
+# Rails dependencies
+gem 'actionpack', RAILS_VERSION, :require => 'action_pack'
+gem 'railties',   RAILS_VERSION, :require => 'rails'
 
 group :datamapper do
   adapters = ENV['ADAPTER'] || ENV['ADAPTERS']
