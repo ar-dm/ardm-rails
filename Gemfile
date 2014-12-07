@@ -20,6 +20,7 @@ gem 'ardm-active_model', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-active_model#
 # Rails dependencies
 gem 'actionpack', RAILS_VERSION, :require => 'action_pack'
 gem 'railties',   RAILS_VERSION, :require => 'rails'
+gem 'protected_attributes'
 
 group :datamapper do
   adapters = ENV['ADAPTER'] || ENV['ADAPTERS']

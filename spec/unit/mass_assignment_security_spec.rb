@@ -1,4 +1,10 @@
 require 'spec_helper'
+
+begin
+  require 'protected_attributes'
+rescue LoadError
+end
+
 require 'dm-rails/mass_assignment_security'
 
 if defined?(DataMapper::MassAssignmentSecurity)
