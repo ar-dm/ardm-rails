@@ -1,10 +1,12 @@
 require 'pathname'
 
-source 'http://rubygems.org'
+source 'https://rubygems.org'
+
+gemspec
 
 SOURCE         = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX   = SOURCE == :path ? ''                                : '.git'
-DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
+DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/ar-dm'
 DM_VERSION     = '~> 1.2.0'
 DO_VERSION     = '~> 0.10.6'
 RAILS_VERSION  = '~> 3.0'
@@ -12,30 +14,12 @@ DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 CURRENT_BRANCH = ENV.fetch('GIT_BRANCH', 'master')
 
 # DataMapper dependencies
-gem 'dm-core',         DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
-gem 'dm-active_model', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-active_model#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+gem 'ardm-core',         DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-core#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+gem 'ardm-active_model', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-active_model#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
 
 # Rails dependencies
 gem 'actionpack', RAILS_VERSION, :require => 'action_pack'
 gem 'railties',   RAILS_VERSION, :require => 'rails'
-
-group :development do
-
-  gem 'jeweler', '~> 1.6.4'
-  gem 'rake',    '~> 0.9.2'
-  gem 'rspec',   '~> 1.3.2'
-
-end
-
-platforms :mri_18 do
-  group :quality do
-
-    gem 'rcov',      '~> 0.9.10'
-    gem 'yard',      '~> 0.7.2'
-    gem 'yardstick', '~> 0.4'
-
-  end
-end
 
 group :datamapper do
   adapters = ENV['ADAPTER'] || ENV['ADAPTERS']
@@ -55,7 +39,7 @@ group :datamapper do
     gem 'dm-do-adapter', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-do-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
   end
 
-  gem 'dm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-migrations#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+  gem 'ardm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-migrations#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
 
   adapters.each do |adapter|
     gem "dm-#{adapter}-adapter", DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-#{adapter}-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
