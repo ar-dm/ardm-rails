@@ -36,12 +36,12 @@ group :datamapper do
       gem "do_#{adapter}", DO_VERSION, do_options.dup
     end
 
-    gem 'dm-do-adapter', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-do-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+    gem 'ardm-do-adapter', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-do-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
   end
 
   gem 'ardm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-migrations#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
 
   adapters.each do |adapter|
-    gem "dm-#{adapter}-adapter", DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-#{adapter}-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
+    gem "ardm-#{adapter}-adapter", DM_VERSION, SOURCE => "#{DATAMAPPER}/ardm-#{adapter}-adapter#{REPO_POSTFIX}", :branch => CURRENT_BRANCH
   end
 end
