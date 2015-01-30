@@ -5,9 +5,10 @@ begin
 rescue LoadError
 end
 
-require 'dm-rails/mass_assignment_security'
-
-if defined?(DataMapper::MassAssignmentSecurity)
+# Unfortunately, the only way to test both branches of this code is to
+#   bundle --without protected_attributes
+# and then run the spec again.
+if defined?(ActiveModel::MassAssignmentSecurity)
   # Because mass-assignment security is based on ActiveModel we just have to
   # ensure that ActiveModel is called.
   describe DataMapper::MassAssignmentSecurity do
@@ -46,6 +47,16 @@ if defined?(DataMapper::MassAssignmentSecurity)
 
         model.send(:attributes=, attributes, true)
       end
+    end
+  end
+else
+  describe DataMapper::MassAssignmentSecurity do
+    it "raises if the DataMapper::MassAssignmentSecurity is included" do
+      expect {
+        class Fake
+          include ::DataMapper::MassAssignmentSecurity
+        end
+      }.to raise_error("Add 'protected_attributes' to your Gemfile to use DataMapper::MassAssignmentSecurity")
     end
   end
 end

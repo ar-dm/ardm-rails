@@ -3,6 +3,7 @@ require 'dm-core/spec/setup'
 require 'dm-core/spec/lib/adapter_helpers'
 require 'dm-core/spec/lib/spec_helper'
 require 'dm-core/spec/lib/pending_helpers'
+require 'dm-rails/railtie'
 
 DataMapper::Spec.setup
 DataMapper.finalize

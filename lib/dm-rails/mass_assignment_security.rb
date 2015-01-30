@@ -3,25 +3,50 @@ require 'active_support/core_ext/class/attribute'
 require 'active_support/concern'
 require 'active_model'
 
-if defined?(::ActiveModel::MassAssignmentSecurity)
+begin
+  require 'protected_attributes'
+rescue LoadError
+  module DataMapper
+    # In rails ~> 4.0, protected_attributes must be required to use this feature.
+    # By requiring it here, we avoid gem load order problems that would cause
+    # the module to not exist if protected attributes was loaded after dm-rails.
+    #
+    # Also this dummy module is inserted to avoid throwing a useless error when the
+    # module would otherwise not exist. This is less mysterious than some part of
+    # the DataMapper code just going missing because you didn't add
+    # protected_attributes to your Gemfile.
+    module MassAssignmentSecurity
+      extend ::ActiveSupport::Concern
+
+      included do
+        raise "Add 'protected_attributes' to your Gemfile to use DataMapper::MassAssignmentSecurity"
+      end
+    end
+  end
+else
   module ActiveModel
     module MassAssignmentSecurity
-      # Provides a patched version of the Sanitizer used in Rails to handle property
-      # and relationship objects as keys. There is no way to inject a custom sanitizer
-      # without reimplementing the permission sets.
+      # Provides a patched version of the Sanitizer used in protected_attributes to
+      # handle property and relationship objects as keys. There is no way to inject
+      # a custom sanitizer without reimplementing the permission sets.
       Sanitizer.send(Sanitizer.is_a?(Module) ? :module_eval : :class_eval) do
         # Returns all attributes not denied by the authorizer.
         #
+        # @param [Class] klass
+        #   Model class
         # @param [Hash{Symbol,String,::DataMapper::Property,::DataMapper::Relationship=>Object}] attributes
         #   Names and values of attributes to sanitize.
+        # @param [#deny?] authorizer
+        #   Usually a ActiveModel::MassAssignmentSecurity::PermissionSet responding to deny?
         # @return [Hash]
         #   Sanitized hash of attributes.
-        def sanitize(attributes, authorizer = nil)
+        def sanitize(klass, attributes, authorizer)
+          rejected = []
           sanitized_attributes = attributes.reject do |key, value|
             key_name = key.name rescue key
-            authorizer ? authorizer.deny?(key_name) : deny?(key_name)
+            rejected << key_name if authorizer.deny?(key_name)
           end
-          debug_protected_attribute_removal(attributes, sanitized_attributes)
+          process_removed_attributes(klass, rejected) unless rejected.empty?
           sanitized_attributes
         end
       end

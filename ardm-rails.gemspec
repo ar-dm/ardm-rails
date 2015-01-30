@@ -18,9 +18,9 @@ Gem::Specification.new do |gem|
   gem.require_paths    = ["lib"]
 
   gem.add_runtime_dependency 'ardm-core',         '~> 1.2'
-  gem.add_runtime_dependency 'ardm-active_model', '~> 1.2'
-  gem.add_runtime_dependency 'actionpack',        '>= 3.0', '< 5.0'
-  gem.add_runtime_dependency 'railties',          '>= 3.0', '< 5.0'
+  gem.add_runtime_dependency 'ardm-active_model', '~> 1.3'
+  gem.add_runtime_dependency 'actionpack',        '~> 4.0'
+  gem.add_runtime_dependency 'railties',          '~> 4.0'
 
   gem.add_development_dependency 'rake',      '~> 0.9'
   gem.add_development_dependency 'rspec',     '~> 1.3'
