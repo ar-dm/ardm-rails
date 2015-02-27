@@ -33,8 +33,8 @@ if defined?(ActiveModel::MassAssignmentSecurity)
         attributes = { :name => 'John', :is_admin => true }
         sanitized_attributes = { :name => 'John' }
         model = Fake.new
-        model.should_receive(:sanitize_for_mass_assignment).with(attributes).and_return(sanitized_attributes)
-        model.should_receive(:_super_attributes=).with(sanitized_attributes)
+        expect(model).to receive(:sanitize_for_mass_assignment).with(attributes).and_return(sanitized_attributes)
+        expect(model).to receive(:_super_attributes=).with(sanitized_attributes)
 
         model.attributes = attributes
       end
@@ -43,7 +43,7 @@ if defined?(ActiveModel::MassAssignmentSecurity)
         attributes = { :name => 'John', :is_admin => true }
         sanitized_attributes = { :name => 'John' }
         model = Fake.new
-        model.should_receive(:_super_attributes=).with(attributes)
+        expect(model).to receive(:_super_attributes=).with(attributes)
 
         model.send(:attributes=, attributes, true)
       end

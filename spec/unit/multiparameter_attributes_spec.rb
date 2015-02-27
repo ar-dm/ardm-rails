@@ -44,7 +44,7 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
       it "converts #{name}" do
         topic = ::Rails::DataMapper::Models::Topic.new
         topic.attributes = attributes
-        topic.last_read.should == date
+        expect(topic.last_read).to eq(date)
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
       it "converts #{name}" do
         topic = ::Rails::DataMapper::Models::Topic.new
         topic.attributes = attributes
-        topic.written_on.should == time
+        expect(topic.written_on).to eq(time)
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
       it "converts #{name}" do
         topic = ::Rails::DataMapper::Models::Topic.new
         topic.attributes = attributes
-        topic.updated_at.should == time
+        expect(topic.updated_at).to eq(time)
       end
     end
 
@@ -102,18 +102,18 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
       }
       attributes = { 'composite' => Object.new }
 
-      ::Rails::DataMapper::Models::Composite.
-        should_receive(:new).
+      expect(::Rails::DataMapper::Models::Composite).
+        to receive(:new).
         with('a string', '1.5', '1.5'.to_i, '1.5'.to_f).
         and_return(attributes['composite'])
 
-      composite_property = mock(::DataMapper::Property)
-      composite_property.stub!(:primitive).and_return(::Rails::DataMapper::Models::Composite)
+      composite_property = double(::DataMapper::Property)
+      allow(composite_property).to receive(:primitive).and_return(::Rails::DataMapper::Models::Composite)
 
       resource = ::Rails::DataMapper::Models::Fake.new
-      resource.stub!(:properties).and_return('composite' => composite_property)
+      allow(resource).to receive(:properties).and_return('composite' => composite_property)
 
-      resource.should_receive(:_super_attributes=).with(attributes)
+      expect(resource).to receive(:_super_attributes=).with(attributes)
 
       resource.attributes = multiparameter_hash
     end
@@ -123,23 +123,23 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
       attributes = { 'composite' => Object.new }
 
       composite_exception = StandardError.new('foo')
-      ::Rails::DataMapper::Models::Composite.
-        should_receive(:new).with('a string').and_raise(composite_exception)
+      expect(::Rails::DataMapper::Models::Composite).
+        to receive(:new).with('a string').and_raise(composite_exception)
 
-      composite_property = mock(::DataMapper::Property)
-      composite_property.stub!(:primitive).and_return(::Rails::DataMapper::Models::Composite)
+      composite_property = double(::DataMapper::Property)
+      allow(composite_property).to receive(:primitive).and_return(::Rails::DataMapper::Models::Composite)
 
       resource = ::Rails::DataMapper::Models::Fake.new
-      resource.stub!(:properties).and_return('composite' => composite_property)
+      allow(resource).to receive(:properties).and_return('composite' => composite_property)
 
-      lambda { resource.attributes = multiparameter_hash }.
-        should raise_error(::Rails::DataMapper::MultiparameterAssignmentErrors) { |ex|
-          ex.errors.size.should == 1
+      expect { resource.attributes = multiparameter_hash }.
+        to raise_error(::Rails::DataMapper::MultiparameterAssignmentErrors) { |ex|
+          expect(ex.errors.size).to eq(1)
 
           error = ex.errors[0]
-          error.attribute.should == 'composite'
-          error.values.should == ['a string']
-          error.exception.should == composite_exception
+          expect(error.attribute).to eq('composite')
+          expect(error.values).to eq(['a string'])
+          expect(error.exception).to eq(composite_exception)
         }
     end
   end
@@ -151,7 +151,7 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
         'updated_at(4i)' => '16', 'updated_at(5i)' => '24', 'updated_at(6i)' => '00' }
 
       topic = ::Rails::DataMapper::Models::Topic.new(attributes)
-      topic.updated_at.should == DateTime.new(2004, 6, 24, 16, 24, 0)
+      expect(topic.updated_at).to eq(DateTime.new(2004, 6, 24, 16, 24, 0))
     end
   end
 
@@ -162,7 +162,7 @@ RSpec.describe Rails::DataMapper::MultiparameterAttributes do
         'updated_at(4i)' => '16', 'updated_at(5i)' => '24', 'updated_at(6i)' => '00' }
 
       topic = ::Rails::DataMapper::Models::Topic.create(attributes)
-      topic.updated_at.should == DateTime.new(2004, 6, 24, 16, 24, 0)
+      expect(topic.updated_at).to eq(DateTime.new(2004, 6, 24, 16, 24, 0))
     end
   end
 end
