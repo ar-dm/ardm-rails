@@ -8,7 +8,7 @@ require 'dm-rails/railtie'
 DataMapper::Spec.setup
 DataMapper.finalize
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
 
   config.extend(DataMapper::Spec::Adapters::Helpers)
   config.include(DataMapper::Spec::PendingHelpers)

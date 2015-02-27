@@ -11,7 +11,7 @@ end
 if defined?(ActiveModel::MassAssignmentSecurity)
   # Because mass-assignment security is based on ActiveModel we just have to
   # ensure that ActiveModel is called.
-  describe DataMapper::MassAssignmentSecurity do
+  RSpec.describe DataMapper::MassAssignmentSecurity do
     before :all do
       class Fake
         super_module = Module.new do
@@ -50,7 +50,7 @@ if defined?(ActiveModel::MassAssignmentSecurity)
     end
   end
 else
-  describe DataMapper::MassAssignmentSecurity do
+  RSpec.describe DataMapper::MassAssignmentSecurity do
     it "raises if the DataMapper::MassAssignmentSecurity is included" do
       expect {
         class Fake
